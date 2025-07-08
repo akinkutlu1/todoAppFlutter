@@ -4,12 +4,12 @@ import 'package:todoapp0/constants/color.dart';
 import 'package:todoapp0/constants/tasktype.dart';
 import 'package:todoapp0/model/task.dart';
 import 'package:todoapp0/screens/add_new_task.dart';
+import 'package:todoapp0/service/auth.dart';
 import 'package:todoapp0/todoitem.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  @override
   State<HomeScreen> createState() => _homeScreenState();
 }
 
@@ -59,9 +59,11 @@ class _homeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Auth authService = Auth();
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: HexColor(backgroundColor),
@@ -77,28 +79,54 @@ class _homeScreenState extends State<HomeScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: const Column(
+                child: Stack(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        "June 27, 2025",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    const Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Text(
+                            "June 27, 2025",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "My Todo List",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 40),
-                      child: Text(
-                        "My Todo List",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
+                    Positioned(
+                      top: 7,
+                      right: 5,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await authService.signOut();
+                          // çıkış işlemi buraya yazılacak
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.3),
+                          foregroundColor: Colors.white,
                         ),
+                        child: const Text("LogOut"),
                       ),
                     ),
                   ],
