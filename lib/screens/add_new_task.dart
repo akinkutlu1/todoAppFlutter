@@ -2,29 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todoapp0/constants/color.dart';
 import 'package:todoapp0/constants/tasktype.dart';
-import 'package:todoapp0/model/task.dart';
+import 'package:todoapp0/model/task_model.dart';
+import 'package:todoapp0/service/task_service.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
-  const AddNewTaskScreen({super.key, required this.addNewTask});
-  final void Function(Task newTask) addNewTask;
-  // Passing function as parameter
+  const AddNewTaskScreen({super.key});
 
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
 }
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController timeController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
+  final TaskService taskService = TaskService();
   TaskType taskType = TaskType.note;
 
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: HexColor(backgroundColor),
@@ -74,9 +75,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                 child: Text("Task title"),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                ), //kutu boyutu
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
                   controller: titleController,
                   decoration: const InputDecoration(
@@ -96,7 +95,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(milliseconds: 300),
-                            content: Text("Category selected"),
+                            content: Text("Note selected"),
                           ),
                         );
                         setState(() {
@@ -110,7 +109,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(milliseconds: 300),
-                            content: Text("Category selected"),
+                            content: Text("Calendar selected"),
                           ),
                         );
                         setState(() {
@@ -124,7 +123,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(milliseconds: 300),
-                            content: Text("Category selected"),
+                            content: Text("Contest selected"),
                           ),
                         );
                         setState(() {
@@ -136,47 +135,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text("Date"),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: TextField(
-                              controller: dateController,
-                              decoration: const InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text("Time"),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: TextField(
-                              controller: timeController,
-                              decoration: const InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              
               const Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Text("Description"),
@@ -196,17 +155,25 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: HexColor("#4A3780"), // Arka plan rengi
-                  foregroundColor: Colors.white, // Yazı rengi
+                  backgroundColor: HexColor("#4A3780"),
+                  foregroundColor: Colors.white,
                 ),
-                onPressed: () {
-                  Task newtask = Task(
-                    type: taskType,
-                    title: titleController.text,
-                    description: descriptionController.text,
+                onPressed: () async {
+                  if (titleController.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Title cannot be empty")),
+                    );
+                    return;
+                  }
+
+                  TaskModel newTask = TaskModel(
+                    type: taskType.name,
+                    title: titleController.text.trim(),
+                    description: descriptionController.text.trim(),
                     isComplated: false,
                   );
-                  widget.addNewTask(newtask);
+
+                  await taskService.createTask(newTask);
                   Navigator.pop(context);
                 },
                 child: const Text("Save"),
