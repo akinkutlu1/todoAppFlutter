@@ -6,6 +6,9 @@ import 'package:todoapp0/screens/add_new_task.dart';
 import 'package:todoapp0/service/auth.dart';
 import 'package:todoapp0/service/task_service.dart';
 import 'package:todoapp0/todoitem.dart';
+import 'package:intl/intl.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat(
+      "d MMMM y",
+      "tr_TR",
+    ).format(DateTime.now());
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
 
@@ -43,20 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Stack(
                   children: [
-                    const Column(
+                    Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 20),
+                          padding: const EdgeInsets.only(top: 20),
                           child: Text(
-                            "July 9, 2025",
-                            style: TextStyle(
+                            formattedDate,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(top: 40),
                           child: Center(
                             child: Text(
@@ -71,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+
                     Positioned(
                       top: 7,
                       right: 5,
@@ -116,8 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // TO DO
                         Expanded(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                             child: ListView.builder(
                               itemCount: todo.length,
                               itemBuilder: (context, index) {
@@ -144,8 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // COMPLETED
                         Expanded(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                             child: ListView.builder(
                               itemCount: completed.length,
                               itemBuilder: (context, index) {

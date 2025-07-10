@@ -4,9 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:todoapp0/screens/login_register_page.dart';
 import 'package:todoapp0/service/auth.dart';
 import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('tr_TR', null); 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
