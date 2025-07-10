@@ -14,8 +14,6 @@ class AddNewTaskScreen extends StatefulWidget {
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController titleController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
   final TaskService taskService = TaskService();
@@ -70,6 +68,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   ],
                 ),
               ),
+
               const Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Text("Task title"),
@@ -84,6 +83,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Row(
@@ -135,24 +135,30 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   ],
                 ),
               ),
-              
+
               const Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Text("Description"),
               ),
               SizedBox(
                 height: 300,
-                child: TextField(
-                  controller: descriptionController,
-                  expands: true,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    isDense: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: TextField(
+                    controller: descriptionController,
+                    expands: true,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      isDense: true,
+                    ),
                   ),
                 ),
               ),
+
+              const SizedBox(height: 20),
+
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("#4A3780"),
@@ -166,11 +172,11 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                     return;
                   }
 
-                  TaskModel newTask = TaskModel(
-                    type: taskType.name,
+                  final newTask = TaskModel(
                     title: titleController.text.trim(),
                     description: descriptionController.text.trim(),
-                    isComplated: false,
+                    type: taskType.name,
+                    isCompleted: false,
                   );
 
                   await taskService.createTask(newTask);

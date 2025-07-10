@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todoapp0/constants/color.dart';
-import 'package:todoapp0/constants/tasktype.dart';
 import 'package:todoapp0/model/task_model.dart';
 import 'package:todoapp0/screens/add_new_task.dart';
 import 'package:todoapp0/service/auth.dart';
@@ -78,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           await authService.signOut();
-                          // çıkış yönlendirmesi buraya eklenebilir
+                          // Çıkış sonrası yönlendirme eklenebilir
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white.withOpacity(0.3),
@@ -106,10 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     final allTasks = snapshot.data!;
                     final List<TaskModel> todo = allTasks
-                        .where((task) => task.isComplated == false)
+                        .where((task) => task.isCompleted == false)
                         .toList();
                     final List<TaskModel> completed = allTasks
-                        .where((task) => task.isComplated == true)
+                        .where((task) => task.isCompleted == true)
                         .toList();
 
                     return Column(
@@ -135,7 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               "Completed",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ),
