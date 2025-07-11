@@ -1,5 +1,6 @@
 class TaskModel {
-  final String? id; // Firestore document ID
+  final String? id; // ✅ id artık nullable
+
   final String? title;
   final String? description;
   final String? type;
@@ -13,7 +14,16 @@ class TaskModel {
     this.isCompleted,
   });
 
-  // Firestore'a veri gönderirken
+  factory TaskModel.fromJson(Map<String, dynamic> json, String documentId) {
+    return TaskModel(
+      id: documentId,
+      title: json['title'],
+      description: json['description'],
+      type: json['type'],
+      isCompleted: json['isCompleted'],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'title': title,
@@ -21,16 +31,5 @@ class TaskModel {
       'type': type,
       'isCompleted': isCompleted,
     };
-  }
-
-  // Firestore'dan veri çekerken
-  factory TaskModel.fromJson(Map<String, dynamic> json, [String? docId]) {
-    return TaskModel(
-      id: docId,
-      title: json['title'],
-      description: json['description'],
-      type: json['type'],
-      isCompleted: json['isCompleted'],
-    );
   }
 }

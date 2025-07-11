@@ -27,4 +27,12 @@ class Auth {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
+
+  // auth.dart
+  Future<void> deleteAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.delete();
+    }
+  }
 }
